@@ -169,7 +169,7 @@ def get_rate_map(
         ["name_muni", "geometry", "observed_cases", "total_cases"]
     ]
 
-    map_rate["rate"] = map_rate["observed_cases"] / map_rate["total_cases"]
+    map_rate["rate"] = map_rate["total_cases"] / map_rate["observed_cases"]
     return map_rate
 
 
@@ -247,9 +247,9 @@ async def plot_model_evaluation_map_altair(
     years: list,
     state: str,
     column="rate",
-    title="Observed Cases/Estimated Cases by city in",
+    title="Estimated Cases/Observed Cases by city in",
     bins=[1 / 2, 95 / 100, 1.05, 2],
-    color_list=["#006aea", "#00b4ca", "#48d085", "#dc7080", "#cb2b2b"],
+    color_list=["#006aea", "#00b4ca", "#48d085", "#dc7080", "#cb2b2b"][::-1],
 ):
     map_rate = get_rate_map(
         years, statemap, q.client.data_table, q.client.parameters
@@ -327,7 +327,7 @@ async def plot_model_evaluation_map_altair(
         .mark_text(size=12, text="Model Evaluation")
         .encode(x=datum(2.5), y=datum(2.5))
         + alt.Chart()
-        .mark_text(size=11, text="Observed Cases/Estimated Cases")
+        .mark_text(size=11, text="Estimated Cases/Observed Cases")
         .encode(x=datum(2.5), y=datum(-1.6))
         + alt.Chart()
         .mark_text(
@@ -362,7 +362,7 @@ async def plot_model_evaluation_hist_altair(
     state: str,
     column="rate",
     bins=[1 / 2, 95 / 100, 1.05, 2],
-    color_list=["#006aea", "#00b4ca", "#48d085", "#dc7080", "#cb2b2b"],
+    color_list=["#006aea", "#00b4ca", "#48d085", "#dc7080", "#cb2b2b"][::-1],
 ):
     map_rate = get_rate_map(
         years, statemap, q.client.data_table, q.client.parameters
@@ -374,7 +374,7 @@ async def plot_model_evaluation_hist_altair(
         .encode(
             x=alt.X(
                 "rate:Q",
-                title="Observed Cases/Estimated Cases",
+                title="Estimated Cases/Observed Cases",
                 bin=alt.Bin(step=0.05, extent=[0, 3]),
                 axis=alt.Axis(values=bins),
             ),
